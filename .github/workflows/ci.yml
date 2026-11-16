@@ -1,0 +1,41 @@
+name: "Sample React CI workflow"
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build-and-test:
+        runs-on: macos-latest
+        steps:
+            - name: "setup nodejs"
+              uses: actions/setup-node@v4
+              with:
+                node-version: 21
+            
+            - name: "checkout version"
+              run: node --version
+
+            - name: "clone repository"
+              uses: actions/checkout@v2
+            
+            - name: "Lists directories"
+              run: ls
+
+            - name: "Install dependencies"
+              run: npm install
+            
+            - name: "Lists directories"
+              run: ls
+
+            - name: "Run tests"
+              run: npm test
+
+            - name: "Build project"
+              run: npm run build
+
+            - name: "Upload project ready build files"
+              uses: actions/upload-artifact@v4
+              with:
+                  name: react-build
+                  path: dist
