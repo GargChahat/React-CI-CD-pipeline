@@ -12,7 +12,7 @@ jobs:
         runs-on: macos-latest
         permissions:
             actions: read
-        environment: production
+        environment: vecel_token
 
         steps:
             - name: "setup nodejs"
@@ -34,7 +34,7 @@ jobs:
             - name: "Deploy to Vercel"
               run: |
                   if [ -z "$VERCEL_TOKEN" ]; then
-                    echo "::error::vecel_token is not configured for the production environment."
+                    echo "::error::vecel_token is not configured for the vecel_token environment."
                     exit 1
                   fi
                   vercel --prod --token "$VERCEL_TOKEN" --confirm --name=cicdproject
