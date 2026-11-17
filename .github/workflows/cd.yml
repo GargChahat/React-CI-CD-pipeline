@@ -8,7 +8,10 @@ on:
 
 jobs:
     deploy:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         runs-on: macos-latest
+        permissions:
+            actions: read
         environment: production
 
         steps:
@@ -25,6 +28,8 @@ jobs:
               with:
                   name: react-build
                   run-id: ${{ github.event.workflow_run.id }}
+                  repository: ${{ github.repository }}
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: "Deploy to Vercel"
               run: vercel --prod --token ${{ secrets.VECEL_TOKEN }} --confirm --name=cicdproject
