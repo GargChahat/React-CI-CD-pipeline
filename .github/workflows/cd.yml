@@ -32,6 +32,11 @@ jobs:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: "Deploy to Vercel"
-              run: vercel --prod --token ${{ secrets.VECEL_TOKEN }} --confirm --name=cicdproject
+              run: |
+                  if [ -z "$VERCEL_TOKEN" ]; then
+                    echo "::error::vecel_token is not configured for the production environment."
+                    exit 1
+                  fi
+                  vercel --prod --token "$VERCEL_TOKEN" --confirm --name=cicdproject
               env:
-                  VERCEL_TOKEN: ${{ secrets.VECEL_TOKEN }}
+                  VERCEL_TOKEN: ${{ secrets.vecel_token }}
