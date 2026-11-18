@@ -28,6 +28,8 @@ pipeline{
                  sh '''
                  ls -l
                  node --version
+                 which node
+                 node -e "console.log(typeof require('node:util').styleText)"
                  npm --version
                  npm install
                  npm run build
