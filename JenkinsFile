@@ -1,40 +1,51 @@
-pipeline{
+pipeline {
     agent any
-     options{
+
+    options {
         skipDefaultCheckout()
     }
 
-    stages{
-        stage('Clean'){
-            steps{
+    stages {
+        stage('Clean') {
+            steps {
                 cleanWs()
             }
         }
-        stage('Checkout'){
-            steps{
+
+        stage('Checkout') {
+            steps {
                 checkout scm
             }
         }
-        stage('Build'){
-            agent{
-                docker{
-                    image 'node:22.11.0-alpine3.20'
+
+        stage('Build') {
+            agent {
+                docker {
+                    image 'node:22-alpine'
                     args '-u root'
                     reuseNode true
                 }
             }
-        
-            steps{
-                 sh '''
-                 ls -l
-                 node --version
-                 which node
-                 node -e "console.log(typeof require('node:util').styleText)"
-                 npm --version
-                 npm install
-                 npm run build
-                 ls -l
-                 '''
+
+            steps {
+                sh '''
+                    echo "Node version:"
+                    node --version
+
+                    echo "Platform:"
+                    node -p "process.platform + ' ' + process.arch"
+
+                    echo "Removing old dependencies:"
+                    rm -rf node_modules
+
+                    echo "Installing dependencies:"
+                    npm ci --include=optional
+
+                    echo "Building React:"
+                    npm run build
+
+                    ls -lh dist
+                '''
             }
         }
     }
