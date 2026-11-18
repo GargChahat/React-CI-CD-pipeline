@@ -6,13 +6,11 @@ pipeline{
             agent{
                 docker{
                     image 'node:18-alpine'
+                    args '-u root'
                     reuseNode true
                 }
             }
-            environment {
-                HOME = '/tmp'
-                npm_config_cache = '/tmp/npm-cache'
-            }
+        
             steps{
                  sh '''
                  ls -l
