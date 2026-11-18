@@ -1,8 +1,6 @@
 pipeline{
     agent any
-    environment {
-        PATH = "/Users/chahatgarg/.docker/bin:/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
-    }
+     
     stages{
         stage('Build'){
             agent{
@@ -10,6 +8,10 @@ pipeline{
                     image 'node:18-alpine'
                     reuseNode true
                 }
+            }
+            environment {
+                HOME = '/tmp'
+                npm_config_cache = '/tmp/npm-cache'
             }
             steps{
                  sh '''
